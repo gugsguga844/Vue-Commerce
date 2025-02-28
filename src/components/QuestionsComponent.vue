@@ -2,11 +2,16 @@
 import { getQuestions } from '@/services/HttpService'
 import { onMounted, ref } from 'vue'
 
-const questoes = ref([])
+const questionList = ref([])
+const correctAnswers = ref([])
+const incorrectAnswers = ref([])
 
 async function getQuestoes() {
   const resultado = await getQuestions()
-  questoes.value = resultado.data.results
+  questionList.value = resultado.data.results.map((newArray) => newArray.question)
+  correctAnswers.value = resultado.data.results.map((newArray) => newArray.correct_answer)
+  incorrectAnswers.value = resultado.data.results.map((newArray) => newArray.incorrect_answers)
+  console.log(questionList, correctAnswers, incorrectAnswers)
 }
 
 onMounted(() => {
@@ -15,8 +20,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-for="questao in questoes" :key="questao.type">
-    <h1>{{ questao.question }}</h1>
+  <div v-for="questao in questionList" :key="questao.type">
+    <h1>{{ questao }}</h1>
   </div>
 
   <div class="optionsDiv">
